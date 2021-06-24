@@ -4,4 +4,10 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        cdlog.cpp \
+        dlog.cpp \
         main.cpp
+
+HEADERS += \
+    cdlog.h \
+    dlog.h
