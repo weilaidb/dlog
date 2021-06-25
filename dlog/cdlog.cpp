@@ -166,7 +166,10 @@ int CDLog::show()
 
 int CDLog::setSw(const char *pKey, unsigned char uacSw)
 {
+    char acBuf[DLOG_KEY_MAX] = {0};
     unsigned int dwLp =  0;
+
+    memcpy(acBuf,pKey,MIN(strlen(pKey), DLOG_KEY_MAX));
     for(dwLp = 0;dwLp < DLOG_SETS_MAX;dwLp++)
     {
         P_DLogNode pNode = &m_Sets[dwLp];
@@ -175,7 +178,7 @@ int CDLog::setSw(const char *pKey, unsigned char uacSw)
             break;
         }
 
-        if(0 == memcmp(pKey, pNode->m_Key, DLOG_KEY_MAX))
+        if(0 == memcmp(acBuf, pNode->m_Key, DLOG_KEY_MAX))
         {
             pNode->m_SW = uacSw;
             break;

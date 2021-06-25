@@ -26,17 +26,19 @@
 using namespace std;
 
 /*****************************宏定义****************************************/
+#ifndef ARRAYSIZE
+#define ARRAYSIZE(A) ((unsigned int)(sizeof(A)/sizeof(A[0])))
+#endif
+
+#define MAX(a,b) ((a)>(b)?(a):(b))
+#define MIN(a,b) ((a)<(b)?(a):(b))
+
 
 /* 存储内容最大值 */
 #define DLOG_KEY_MAX (64)       /* KEY字符最大数量 */
 #define DLOG_CONTENT_MAX (512)  /* 保存字符最大数量 */
 #define DLOG_SETS_MAX (512)     /* 至多比较条数 */
 
-#ifndef ARRAYSIZE
-#define ARRAYSIZE(A) ((unsigned int)(sizeof(A)/sizeof(A[0])))
-#endif
-
-#define MAX(a,b) ((a)>(b)?(a):(b))
 
 
 /*****************************结构体或类型定义*******************************/
