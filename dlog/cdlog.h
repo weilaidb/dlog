@@ -44,7 +44,7 @@ using namespace std;
 typedef struct T_DLogNode {
     char m_Key[DLOG_KEY_MAX];//key
     char m_Buf[DLOG_CONTENT_MAX];//content
-    unsigned char m_SW;//switch
+    unsigned char m_SW;//switch 1:forced log,0:auto judge
     unsigned char m_Used;//is used,1:used,0:no use
     unsigned short m_SameCnt;//same cnt record
 }T_DLogNode, *P_DLogNode;
@@ -64,17 +64,21 @@ class CDLog
 {
 public:
     CDLog();
+    CDLog(const char *pName);
 
     int dLog(const char *pTips, unsigned char *pMsg, unsigned short wLen, const char *fmt,...);
     unsigned char isSameCont(char *pBufOrg, char *pBufNew, unsigned short wCmpLen);
     P_DLogNode findNodeByKey(const char *pKey, unsigned short wLen);
-
+    int show();
+    int setSw(const char *pKey, unsigned char uacSw);
 private:
     pthread_mutex_t m_Mutex;
     T_DLogNode m_Sets[DLOG_SETS_MAX];
+    char m_ModName[DLOG_KEY_MAX];
 
 public:
     static CDLog* GetInstance();
+    static CDLog* GetInstanceExt(const char *pName);
 
 private:
     static CDLog* m_pInstance;

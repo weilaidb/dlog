@@ -36,6 +36,15 @@ CDLog::CDLog()
 {
     m_Mutex = PTHREAD_MUTEX_INITIALIZER;
     memset(&m_Sets,0,sizeof (m_Sets));
+    memset(m_ModName,0,sizeof (m_ModName));
+}
+
+CDLog::CDLog(const char *pName)
+{
+    m_Mutex = PTHREAD_MUTEX_INITIALIZER;
+    memset(&m_Sets,0,sizeof (m_Sets));
+    memset(m_ModName,0,sizeof (m_ModName));
+    memcpy(m_ModName,pName,sizeof (m_ModName));
 }
 
 CDLog* CDLog::GetInstance()
@@ -43,6 +52,16 @@ CDLog* CDLog::GetInstance()
     if ( m_pInstance == NULL )
     {
         m_pInstance = new CDLog;
+    }
+
+    return m_pInstance;
+}
+
+CDLog* CDLog::GetInstanceExt(const char *pName)
+{
+    if ( m_pInstance == NULL )
+    {
+        m_pInstance = new CDLog(pName);
     }
 
     return m_pInstance;
@@ -68,10 +87,15 @@ int CDLog::dLog(const char *pTips, unsigned char *pMsg, unsigned short wLen, con
     va_end(argptr);
     if(cnt < 0)
     {
-        //TODO
-//        printf("error:snprintf invalid len/M:%d(%u),buf:%s\n",iLen, sizeof(buffer), buffer);
         return -1;
     }
+
+    if(pNode->m_SW > 0)
+    {
+        printf("[%s]m_SW:%u, forced logged\n", pNode->m_Key, pNode->m_SW);
+        return 0;
+    }
+
 
     if(true == isSameCont(pNode->m_Buf, buffer, DLOG_CONTENT_MAX))
     {
@@ -84,8 +108,6 @@ int CDLog::dLog(const char *pTips, unsigned char *pMsg, unsigned short wLen, con
     memcpy(pNode->m_Buf, buffer, DLOG_CONTENT_MAX);
 
     return 0x0;
-
-    return(cnt);
 }
 
 
@@ -104,9 +126,8 @@ unsigned char CDLog::isSameCont(char *pBufOrg, char *pBufNew, unsigned short wCm
 P_DLogNode CDLog::findNodeByKey(const char *pKey, unsigned short wLen)
 {
     unsigned int dwLp =  0;
-    for(dwLp = 0;dwLp < ARRAYSIZE(m_Sets);dwLp++)
+    for(dwLp = 0;dwLp < DLOG_SETS_MAX;dwLp++)
     {
-        //printf("No:%-03u -- %-03u\n", dwLp+1, m_Sets[dwLp]);
         P_DLogNode pNode = &m_Sets[dwLp];
         if(0 == pNode->m_Used)
         {
@@ -126,8 +147,43 @@ P_DLogNode CDLog::findNodeByKey(const char *pKey, unsigned short wLen)
 
 
 
+int CDLog::show()
+{
+    unsigned int dwLp =  0;
+    printf("%-4s%-40s%-8s%-3s\n", "No", "Key", "SameCnt", "Sw");
+    for(dwLp = 0;dwLp < DLOG_SETS_MAX;dwLp++)
+    {
+        P_DLogNode pNode = &m_Sets[dwLp];
+        if(0 == pNode->m_Used)
+        {
+            break;
+        }
+        printf("%-4u%-40s%-8u%-3u\n", dwLp+1, pNode->m_Key, pNode->m_SameCnt, pNode->m_SW);
+    }
 
+    return 0;
+}
 
+int CDLog::setSw(const char *pKey, unsigned char uacSw)
+{
+    unsigned int dwLp =  0;
+    for(dwLp = 0;dwLp < DLOG_SETS_MAX;dwLp++)
+    {
+        P_DLogNode pNode = &m_Sets[dwLp];
+        if(0 == pNode->m_Used)
+        {
+            break;
+        }
+
+        if(0 == memcmp(pKey, pNode->m_Key, DLOG_KEY_MAX))
+        {
+            pNode->m_SW = uacSw;
+            break;
+        }
+    }
+
+    return 0;
+}
 
 /*****************************by extern "C"****************************************/
 /*****************************头文件****************************************/
