@@ -69,9 +69,9 @@ public:
     CDLog(const char *pName);
 
     int dLog(const char *pTips, unsigned char *pMsg, unsigned short wLen, const char *fmt,...);
-    unsigned char isSameCont(char *pBufOrg, char *pBufNew, unsigned short wCmpLen);
+    unsigned char isSameBuf(char *pBufOrg, char *pBufNew, unsigned short wCmpLen);
     P_DLogNode findNodeByKey(const char *pKey, unsigned short wLen);
-    int show();
+    int show(unsigned char ucPrintBuf = 0);
     int setSw(const char *pKey, unsigned char uacSw);
 private:
     pthread_mutex_t m_Mutex;
@@ -80,7 +80,7 @@ private:
 
 public:
     static CDLog* GetInstance();
-    static CDLog* GetInstanceExt(const char *pName);
+    static CDLog* GetInstance(const char *pName);
 
 private:
     static CDLog* m_pInstance;

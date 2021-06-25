@@ -57,7 +57,7 @@ CDLog* CDLog::GetInstance()
     return m_pInstance;
 }
 
-CDLog* CDLog::GetInstanceExt(const char *pName)
+CDLog* CDLog::GetInstance(const char *pName)
 {
     if ( m_pInstance == NULL )
     {
@@ -97,7 +97,7 @@ int CDLog::dLog(const char *pTips, unsigned char *pMsg, unsigned short wLen, con
     }
 
 
-    if(true == isSameCont(pNode->m_Buf, buffer, DLOG_CONTENT_MAX))
+    if(true == isSameBuf(pNode->m_Buf, buffer, DLOG_CONTENT_MAX))
     {
         pNode->m_SameCnt++;
         printf("[%s]buffer same cnt:%u\n", pNode->m_Key, pNode->m_SameCnt);
@@ -111,7 +111,7 @@ int CDLog::dLog(const char *pTips, unsigned char *pMsg, unsigned short wLen, con
 }
 
 
-unsigned char CDLog::isSameCont(char *pBufOrg, char *pBufNew, unsigned short wCmpLen)
+unsigned char CDLog::isSameBuf(char *pBufOrg, char *pBufNew, unsigned short wCmpLen)
 {
     if((NULL == pBufOrg) || (NULL == pBufNew))
     {
@@ -147,9 +147,10 @@ P_DLogNode CDLog::findNodeByKey(const char *pKey, unsigned short wLen)
 
 
 
-int CDLog::show()
+int CDLog::show(unsigned char ucPrintBuf)
 {
     unsigned int dwLp =  0;
+    printf("Module:%s\n", m_ModName);
     printf("%-4s%-40s%-8s%-3s\n", "No", "Key", "SameCnt", "Sw");
     for(dwLp = 0;dwLp < DLOG_SETS_MAX;dwLp++)
     {
@@ -159,6 +160,10 @@ int CDLog::show()
             break;
         }
         printf("%-4u%-40s%-8u%-3u\n", dwLp+1, pNode->m_Key, pNode->m_SameCnt, pNode->m_SW);
+        if(ucPrintBuf > 0)
+        {
+            printf("    |--%s\n", pNode->m_Buf);
+        }
     }
 
     return 0;

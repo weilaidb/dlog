@@ -20,7 +20,7 @@ int main()
             return -1;
         }
 
-        CDLog::GetInstance()->dLog(buf, NULL, 0, "niceto meet you!!!,aaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+        CDLog::GetInstance("CLK")->dLog(buf, NULL, 0, "niceto meet you!!!,aaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
     }
 
     CDLog::GetInstance()->setSw("ABC-0",1);
@@ -43,7 +43,7 @@ int main()
     }
 
 
-    CDLog::GetInstance()->show();
+    CDLog::GetInstance()->show(1);
 
 //    CDLog::GetInstance()->dLog("abc", NULL, 0, "niceto meet you!!!");
 //    CDLog::GetInstance()->dLog("abc", NULL, 0, "niceto meet you!!!");
