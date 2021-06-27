@@ -14,6 +14,7 @@
 
 
 /*****************************头文件****************************************/
+
 #include "dlog.h"
 
 /*****************************宏定义****************************************/
@@ -63,7 +64,45 @@ extern "C" {
 
 
 /*****************************函数或类实现****************************************/
+int getStrOfData(BYTE *pData, WORD wLen)
+{
+    char *pResult = (char *)malloc(2*wLen + 1);
+    if(NULL == pResult)
+    {
+        return -1;
+    }
+    memset((void *)pResult,0,2*wLen + 1);
 
+    int iLen = 0;
+    int iTotal = 0;
+    WORD16 wLp =  0;
+
+    for(wLp = 0;wLp < wLen;wLp++)
+    {
+        iLen = snprintf(pResult+iTotal, 4,"%02x", pData[wLp]);
+        if(iLen < 0)
+        {
+            goto EXITLABEL;
+        }
+        iTotal += iLen;
+    }
+    pResult[2*wLen] = '\0';
+
+
+    printf("result:%s\n", pResult);
+
+
+
+    return 0;
+
+EXITLABEL:
+    if(NULL != pResult)
+    {
+        free(pResult);
+        pResult = NULL;
+    }
+    return -2;
+}
 
 #ifdef __cplusplus
 }

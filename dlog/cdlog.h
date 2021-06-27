@@ -23,6 +23,9 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include "basetype.h"
+
+
 using namespace std;
 
 /*****************************宏定义****************************************/
@@ -46,9 +49,9 @@ using namespace std;
 typedef struct T_DLogNode {
     char m_Key[DLOG_KEY_MAX];//key
     char m_Buf[DLOG_CONTENT_MAX];//content
-    unsigned char m_SW;//switch 1:forced log,0:auto judge
-    unsigned char m_Used;//is used,1:used,0:no use
-    unsigned short m_SameCnt;//same cnt record
+    BYTE m_SW;//switch 1:forced log,0:auto judge
+    BYTE m_Used;//is used,1:used,0:no use
+    WORD m_SameCnt;//same cnt record
 }T_DLogNode, *P_DLogNode;
 
 
@@ -68,11 +71,13 @@ public:
     CDLog();
     CDLog(const char *pName);
 
-    int dLog(const char *pTips, unsigned char *pMsg, unsigned short wLen, const char *fmt,...);
-    unsigned char isSameBuf(char *pBufOrg, char *pBufNew, unsigned short wCmpLen);
-    P_DLogNode findNodeByKey(const char *pKey, unsigned short wLen);
-    int show(unsigned char ucPrintBuf = 0);
-    int setSw(const char *pKey, unsigned char uacSw);
+    int dLog(const char *pTips, BYTE *pMsg, WORD wLen, const char *fmt,...);
+    BYTE isSameBuf(char *pBufOrg, char *pBufNew, WORD wCmpLen);
+    P_DLogNode findNodeByKey(const char *pKey, WORD wLen);
+    int show(BYTE ucPrintBuf = 0);
+    int setSw(const char *pKey, BYTE uacSw);
+    string getStrOfData(BYTE *pData, WORD wLen);
+
 private:
     pthread_mutex_t m_Mutex;
     T_DLogNode m_Sets[DLOG_SETS_MAX];

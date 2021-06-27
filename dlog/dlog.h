@@ -21,18 +21,17 @@
 #include <string.h>
 #include <stdarg.h>
 #include <pthread.h>
-
-using namespace std;
+#include "basetype.h"
 
 /* 存储内容最大值 */
-#define DLOG_CONTENT_MAX (256)
+//#define DLOG_CONTENT_MAX (256)
 
 
-typedef struct T_DLogNode {
-    char m_buf[DLOG_CONTENT_MAX];//store buffer
-    unsigned char m_sw;//switch
-    unsigned short m_same_cnt;//switch
-}T_DLogNode, *P_DLogNode;
+//typedef struct T_DLogNode {
+//    char m_buf[DLOG_CONTENT_MAX];//store buffer
+//    unsigned char m_sw;//switch
+//    unsigned short m_same_cnt;//switch
+//}T_DLogNode, *P_DLogNode;
 
 
 
@@ -80,7 +79,7 @@ extern "C" {
 
 
 /*****************************函数或类声明****************************************/
-
+int getStrOfData(BYTE *pData, WORD wLen);
 
 /*****************************函数或类实现****************************************/
 

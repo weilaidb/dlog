@@ -68,7 +68,7 @@ CDLog* CDLog::GetInstance(const char *pName)
 }
 
 
-int CDLog::dLog(const char *pTips, unsigned char *pMsg, unsigned short wLen, const char *fmt,...)
+int CDLog::dLog(const char *pTips, BYTE *pMsg, WORD wLen, const char *fmt,...)
 {
     P_DLogNode pNode = findNodeByKey(pTips, DLOG_KEY_MAX);
     if(NULL == pNode)
@@ -92,7 +92,7 @@ int CDLog::dLog(const char *pTips, unsigned char *pMsg, unsigned short wLen, con
 
     if(pNode->m_SW > 0)
     {
-        printf("[%s]m_SW:%u, forced logged\n", pNode->m_Key, pNode->m_SW);
+        //        printf("[%s]m_SW:%u, forced logged\n", pNode->m_Key, pNode->m_SW);
         return 0;
     }
 
@@ -100,18 +100,18 @@ int CDLog::dLog(const char *pTips, unsigned char *pMsg, unsigned short wLen, con
     if(true == isSameBuf(pNode->m_Buf, buffer, DLOG_CONTENT_MAX))
     {
         pNode->m_SameCnt++;
-        printf("[%s]buffer same cnt:%u\n", pNode->m_Key, pNode->m_SameCnt);
+        //        printf("[%s]buffer same cnt:%u\n", pNode->m_Key, pNode->m_SameCnt);
         return 0x1;
     }
 
-    printf("[%s]buffer differ old:%s, new:%s\n", pNode->m_Key, pNode->m_Buf, buffer);
+    //    printf("[%s]buffer differ old:%s, new:%s\n", pNode->m_Key, pNode->m_Buf, buffer);
     memcpy(pNode->m_Buf, buffer, DLOG_CONTENT_MAX);
 
     return 0x0;
 }
 
 
-unsigned char CDLog::isSameBuf(char *pBufOrg, char *pBufNew, unsigned short wCmpLen)
+BYTE CDLog::isSameBuf(char *pBufOrg, char *pBufNew, WORD wCmpLen)
 {
     if((NULL == pBufOrg) || (NULL == pBufNew))
     {
@@ -123,7 +123,7 @@ unsigned char CDLog::isSameBuf(char *pBufOrg, char *pBufNew, unsigned short wCmp
 }
 
 
-P_DLogNode CDLog::findNodeByKey(const char *pKey, unsigned short wLen)
+P_DLogNode CDLog::findNodeByKey(const char *pKey, WORD wLen)
 {
     unsigned int dwLp =  0;
     for(dwLp = 0;dwLp < DLOG_SETS_MAX;dwLp++)
@@ -147,7 +147,7 @@ P_DLogNode CDLog::findNodeByKey(const char *pKey, unsigned short wLen)
 
 
 
-int CDLog::show(unsigned char ucPrintBuf)
+int CDLog::show(BYTE ucPrintBuf)
 {
     unsigned int dwLp =  0;
     printf("Module:%s\n", m_ModName);
@@ -162,14 +162,14 @@ int CDLog::show(unsigned char ucPrintBuf)
         printf("%-4u%-40s%-8u%-3u\n", dwLp+1, pNode->m_Key, pNode->m_SameCnt, pNode->m_SW);
         if(ucPrintBuf > 0)
         {
-            printf("    |--%s\n", pNode->m_Buf);
+            printf("  |--%s\n", pNode->m_Buf);
         }
     }
 
     return 0;
 }
 
-int CDLog::setSw(const char *pKey, unsigned char uacSw)
+int CDLog::setSw(const char *pKey, BYTE uacSw)
 {
     char acBuf[DLOG_KEY_MAX] = {0};
     unsigned int dwLp =  0;
@@ -192,6 +192,28 @@ int CDLog::setSw(const char *pKey, unsigned char uacSw)
 
     return 0;
 }
+
+//C++版本 无符号数组转字符串
+string CDLog::getStrOfData(BYTE *pData, WORD wLen)
+{
+    string result("");
+    char acBuf[4] = {0};
+    int iLen = 0;
+    WORD16 wLp =  0;
+
+    for(wLp = 0;wLp < wLen;wLp++)
+    {
+        iLen = snprintf(acBuf, sizeof(acBuf),"%02x", pData[wLp]);
+        if(iLen < 0)
+        {
+            return "";
+        }
+        result += acBuf;
+    }
+
+    return result;
+}
+
 
 /*****************************by extern "C"****************************************/
 /*****************************头文件****************************************/

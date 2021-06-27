@@ -9,5 +9,6 @@ SOURCES += \
         main.cpp
 
 HEADERS += \
+    basetype.h \
     cdlog.h \
     dlog.h

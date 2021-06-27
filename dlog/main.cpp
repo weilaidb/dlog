@@ -1,5 +1,6 @@
 #include <iostream>
 #include "cdlog.h"
+#include "dlog.h"
 
 using namespace std;
 
@@ -20,7 +21,7 @@ int main()
             return -1;
         }
 
-        CDLog::GetInstance("CLK")->dLog(buf, NULL, 0, "niceto meet you!!!,aaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+        CDLog::GetInstance("CLK")->dLog(buf, NULL, 0, "niceto meet you!!!,ae");
     }
 
     CDLog::GetInstance()->setSw("ABC-0",1);
@@ -39,7 +40,7 @@ int main()
             return -1;
         }
 
-        CDLog::GetInstance()->dLog(buf, NULL, 0, "niceto meet you!!!,aaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+        CDLog::GetInstance()->dLog(buf, NULL, 0, "niceto meet you!!!,ae");
     }
 
 
@@ -58,5 +59,15 @@ int main()
 //    CDLog::GetInstance()->dLog("abc12", NULL, 0, "niceto meet you!!!");
 //    CDLog::GetInstance()->dLog("abc12", NULL, 0, "niceto meet you!!!");
 //    CDLog::dLog("nihaoma");
+
+    unsigned char buf[2] = {0};
+    memset(buf, 1, sizeof(buf));
+
+    string str;
+    str = CDLog::GetInstance()->getStrOfData(buf, sizeof(buf));
+    printf("str : %s\n", str.c_str());
+
+    getStrOfData(buf, sizeof(buf));
+
     return 0;
 }
