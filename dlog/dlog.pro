@@ -6,8 +6,10 @@ CONFIG -= qt
 SOURCES += \
         cdlog.cpp \
         dlog.cpp \
-        main.cpp
+        main.cpp \
+        pubsw.cpp
 
 HEADERS += \
     cdlog.h \
-    dlog.h
+    dlog.h \
+    pubsw.h
