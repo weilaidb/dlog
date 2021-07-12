@@ -10,6 +10,7 @@ SOURCES += \
         pubsw.cpp
 
 HEADERS += \
+    basetype.h \
     cdlog.h \
     dlog.h \
     pubsw.h
