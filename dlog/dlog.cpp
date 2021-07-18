@@ -153,16 +153,17 @@ int dLog(unsigned char ucModIndex, const char *pTips, const unsigned char *pMsg,
         return 0;
     }
 
-    char buffer[DLOG_CHAR_CONTENT_MAX] = {0};
+
     va_list argptr;
     int cnt;
+    char buffer[DLOG_CHAR_CONTENT_MAX] = {0};
 
     va_start(argptr, fmt);
     cnt = vsnprintf(buffer, sizeof(buffer), fmt, argptr);
     va_end(argptr);
     if(cnt < 0)
     {
-        return 0;
+        pNode->m_Buf[DLOG_CHAR_CONTENT_MAX - 1] = '\0';
     }
 
     if(pNode->m_SW > 0)
@@ -180,7 +181,9 @@ int dLog(unsigned char ucModIndex, const char *pTips, const unsigned char *pMsg,
     }
 
     DLOGPRINTF("[%s]buffer differ old:%s,new:%s\n", pNode->m_Key, pNode->m_Buf, buffer);
+    memset(pNode->m_Buf, 0, DLOG_CHAR_CONTENT_MAX);
     memcpy(pNode->m_Buf, buffer, DLOG_CHAR_CONTENT_MAX);
+    pNode->m_Buf[DLOG_CHAR_CONTENT_MAX - 1] = '\0';
     if((NULL != pMsg) && (0 != wLen))
     {
         memcpy(pNode->m_uacStream, pMsg, MIN(DLOG_UCHAR_CONTENT_MAX, wLen));
@@ -205,9 +208,9 @@ int dLogFormatKey(char *acBuf, unsigned char uacLen, const char *fmt, ...)
     va_start(argptr, fmt);
     cnt = vsnprintf(acBuf, uacLen, fmt, argptr);
     va_end(argptr);
-    if(cnt < 0)
+    if((cnt < 0) && (uacLen > 0))
     {
-        return -1;
+        acBuf[uacLen - 1] = '\0';
     }
 
     return 0x0;
@@ -328,18 +331,25 @@ int diagDLogShow(unsigned char ucModIndex, unsigned char ucFlag)
         //print buf
         if(ucFlag & 0x1)
         {
-            printf("  buf|-- %s\n",pNode->m_Buf);
+            if(strlen(pNode->m_Buf) >= DLOG_CHAR_CONTENT_MAX - 1)
+            {
+                printf("  buf[F]|-- %s\n",pNode->m_Buf);
+            }
+            else
+            {
+                printf("  buf   |-- %s\n",pNode->m_Buf);
+            }
         }
 
         if(ucFlag & 0x2)
         {
             if(pNode->m_wLen >= DLOG_UCHAR_CONTENT_MAX)
             {
-                printf("  buf[%u out of range:%d]\n",pNode->m_wLen, DLOG_UCHAR_CONTENT_MAX);
+                printf("  msg[%u out of range:%d]\n",pNode->m_wLen, DLOG_UCHAR_CONTENT_MAX);
             }
             else
             {
-                printf("  buf[%u]\n", pNode->m_wLen);
+                printf("  msg[%u]\n", pNode->m_wLen);
             }
         }
         //print unsigned buf
@@ -347,11 +357,11 @@ int diagDLogShow(unsigned char ucModIndex, unsigned char ucFlag)
         {
             if(pNode->m_wLen >= DLOG_UCHAR_CONTENT_MAX)
             {
-                printf("  ubuf[%u out of range:%d]\n",pNode->m_wLen, DLOG_UCHAR_CONTENT_MAX);
+                printf("  msg[F]\n");
             }
             else
             {
-                printf("  ubuf[%u]\n", pNode->m_wLen);
+                printf("  msg[%u]\n", pNode->m_wLen);
             }
 
             for(dwLp2 = 0;dwLp2 < pNode->m_wLen; dwLp2++)

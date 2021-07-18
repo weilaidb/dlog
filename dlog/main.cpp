@@ -59,18 +59,16 @@ void test1()
 ////    CDLog::GetInstance()->dLog("abc12", NULL, 0, "niceto meet you!!!");
 ////    CDLog::dLog("nihaoma");
 }
-int main()
-{
-    dLogInit();
 
-    cout << "Hello World!" << endl;
+int testDLog(const char *pKey)
+{
     unsigned int dwLp =  0;
     for(dwLp = 0;dwLp < 10;dwLp++)
     {
         char buf[DLOG_KEY_MAX] = {0};
         int iLen = 0;
 
-        iLen = snprintf(buf, sizeof(buf),"%s-%u", "ABC", dwLp);
+        iLen = snprintf(buf, sizeof(buf),"%s-%u", pKey, dwLp);
         if(iLen < 0)
         {
             //TODO
@@ -80,26 +78,26 @@ int main()
 
         dLog(0, buf, NULL, 0, "niceto meet you!!!,");
     }
+    return 0;
+}
 
-    for(dwLp = 0;dwLp < 10;dwLp++)
-    {
-        char buf[DLOG_KEY_MAX] = {0};
-        int iLen = 0;
 
-        iLen = snprintf(buf, sizeof(buf),"%s-%u", "ABC", dwLp);
-        if(iLen < 0)
-        {
-            //TODO
-            printf("error:snprintf invalid len/M:%d(%u),buf:%s\n",iLen, sizeof(buf), buf);
-            return -1;
-        }
+int main()
+{
+//    diagDLogSetSw(0,1);
+    dLogInit();
 
-        dLog(0, buf, NULL, 0, "niceto meet you!!!,");
-    }
+    cout << "Hello World!" << endl;
+    testDLog("ABC");
+    testDLog("ABC");
 
-    diagDLogShow(0,0);
-    diagDLogShow(0,1);
-    diagDLogShow(0,3);
+    dLog(0,"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaee", NULL, 0,"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxyyyyxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxzz");
+    dLog(0,"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaee", NULL, 0,"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxyyyyxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxzz");
+//    dLog(0,"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaee", NULL, 0,"yyy");
+
+//    diagDLogShow(0,0);
+//    diagDLogShow(0,1);
+//    diagDLogShow(0,3);
     diagDLogShow(0,7);
 
     return 0;
